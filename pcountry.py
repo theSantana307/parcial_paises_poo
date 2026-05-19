@@ -10,4 +10,12 @@ class Country:
         self.poblacion = data.get("population", 0)
         self.area = data.get("area", 0.0)
         self.region = data.get("region", "—")
+
+    def __str__(self) -> str:
+        return f"{self.nombre} (Capital: {self.capital}, Población: {self.poblacion:,}, Área: {self.area:,} km²)"
+
+    def density(self) -> float:
+        return self.poblacion / self.area if self.area > 0 else 0.0 
+    
+    
         
