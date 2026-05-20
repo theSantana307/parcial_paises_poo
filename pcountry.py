@@ -70,3 +70,9 @@ class CountryAPI:
         except HTTPError as e:
             print(f"Error {e.response.status_code}: {name} no encontrado")
         return None
+
+
+    def by_names(self, names: list) -> list:
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            resultados = list(executor.map(self.by_name, names))
+        return [pais for pais in resultados if pais is not None]
