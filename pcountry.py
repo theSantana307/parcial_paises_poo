@@ -42,3 +42,31 @@ class Country:
         print(f" Mayor poblacion : {ganador_poblacion.nombre}")
         print(f" Mayor Area      : {ganador_area.nombre}")
         print(f" Mayor densidad  : {ganador_densidad.nombre}\n")
+
+
+class CountryAPI:
+    BASE = "https://restcountries.com/v3.1"
+
+    def by_region(self, region: str) -> list:
+        url = f"{self.BASE}/region/{region}"
+        try:
+            r = requests.get(url, timeout=5)
+            r.raise_for_status()
+            return [Country(item) for item in r.json()]
+        except Exception as e:
+            print(f"Error al buscar region {region}: {e}")
+            return []
+
+    def by_name(self, name: str) -> Country:
+        url = f"{self.BASE}/name/{name}"
+        try:
+            r = requests.get(url, timeout=5)
+            r.raise_for_status()
+            return Country(r.json()[0])
+        except Timeout:
+            print(f"La API tardo demasiado para: {name}")
+        except ConnectionError:
+            print(f"Sin conexion a internet al buscar: {name}")
+        except HTTPError as e:
+            print(f"Error {e.response.status_code}: {name} no encontrado")
+        return None
