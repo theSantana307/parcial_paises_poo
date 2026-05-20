@@ -58,7 +58,7 @@ class CountryAPI:
             return []
 
     def by_name(self, name: str) -> Country:
-        url = f"{self.BASE}/name/{name}"
+        url = f"{self.BASE}/name/{name}?fullText=true"
         try:
             r = requests.get(url, timeout=5)
             r.raise_for_status()
@@ -76,6 +76,5 @@ class CountryAPI:
         with ThreadPoolExecutor(max_workers=5) as executor:
             resultados = list(executor.map(self.by_name, names))
         return [pais for pais in resultados if pais is not None]
-    
 
-    
+        
